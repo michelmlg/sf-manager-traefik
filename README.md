@@ -1,4 +1,4 @@
-#🚀 6. COMO OS SERVIÇOS SE REGISTRAM NO TRAEFIK
+# 🚀 COMO OS SERVIÇOS SE REGISTRAM NO TRAEFIK
 
 Agora seus outros projetos terão labels, e o Traefik os enxerga via Docker.
 
