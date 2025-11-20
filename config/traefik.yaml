@@ -21,3 +21,13 @@ certificatesResolvers:
       storage: "acme.json"
       httpChallenge:
         entryPoint: web
+
+# DUCK DNS
+#certificatesResolvers:
+#  duckdns:
+#    acme:
+#     email: "seu-email@dominio.com"
+#      storage: "acme.json"
+#      dnsChallenge:
+#        provider: duckdns
+#        delayBeforeCheck: 0
