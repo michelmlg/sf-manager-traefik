@@ -1,0 +1,11 @@
+http:
+  middlewares:
+    strip-api:
+      stripPrefix:
+        prefixes:
+          - "/api"
+
+    redirect-https:
+      redirectScheme:
+        scheme: "https"
+        permanent: true

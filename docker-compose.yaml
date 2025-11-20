@@ -1,63 +1,15 @@
-version: "3.8"
+version: "3.9"
 
 services:
   traefik:
-    image: traefik:v3.1.5
     container_name: traefik
+    image: traefik:v3.1
     restart: always
-    command:
-      # Básico
-      - "--api.dashboard=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-
-      # Entrypoints
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-
-      # Redireciona automaticamente HTTP → HTTPS
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
-
-      # Dashboard (só acessível via HTTPS e com domínio)
-      - "--api.insecure=false"                    # ← desativa o modo inseguro
-
-      # === LET'S ENCRYPT (ACME) - ATIVADO ===
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsencrypt.acme.email=seuemail@gmail.com"  # ← MUDE AQUI
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
-
-      # Logs
-      - "--log.level=INFO"
-
     ports:
       - "80:80"
       - "443:443"
-      # - "8080:8080"    # ← remove se não quiser expor o dashboard publicamente
-
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - letsencrypt:/letsencrypt   # ← volume persistente pro certificado
-
-    networks:
-      - traefik_network
-
-    labels:
-      # Dashboard protegido por HTTPS
-      #- "traefik.enable=true"
-      #- "traefik.http.routers.dashboard.rule=Host(`traefik.seudominio.com`)"  # ← mude pro seu domínio
-      #- "traefik.http.routers.dashboard.entrypoints=websecure"
-      #- "traefik.http.routers.dashboard.service=api@internal"
-      #- "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
-      #- "traefik.http.routers.dashboard.middlewares=dashboard-auth"
-      # Auth básica opcional no dashboard (recomendado)
-      - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$zZ9d0m9z$$k8zC9v9t9x9y9z9a9b9c9d"  # usuário: admin / senha: traefik
-
-volumes:
-  letsencrypt:    # ← armazena os certificados pra sempre
-
-networks:
-  traefik_network:
-    name: traefik_network
+      - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./config/dynamic:/etc/traefik/config/dynamic:ro
+      - ./config/acme.json:/acme.json
