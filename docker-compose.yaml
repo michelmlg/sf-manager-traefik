@@ -9,8 +9,17 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080" # Web Viewer
+    environment:
+      - .env
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
-      - ./config/dynamic:/etc/traefik/config/dynamic:ro
-      - ./config/acme.json:/acme.json
+      - ./config/dynamic:/etc/traefik/config/dynamic
+      #- ./config/acme.json:/acme.json
+    networks:
+      - traefik_network
+
+networks:
+  traefik_network:
+    name: traefik_network
+    external: true

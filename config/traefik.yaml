@@ -6,9 +6,11 @@ entryPoints:
 
 api:
   dashboard: true
+  insecure: true
 
 providers:
   docker:
+    endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
   file:
     directory: /etc/traefik/config/dynamic
@@ -23,11 +25,14 @@ certificatesResolvers:
         entryPoint: web
 
 # DUCK DNS
-#certificatesResolvers:
-#  duckdns:
-#    acme:
-#     email: "seu-email@dominio.com"
-#      storage: "acme.json"
-#      dnsChallenge:
-#        provider: duckdns
-#        delayBeforeCheck: 0
+# certificatesResolvers:
+#   duckdns:
+#     acme:
+#       email: "seu-email@dominio.com"
+#       storage: "acme.json"
+#       dnsChallenge:
+#         provider: duckdns
+#         resolvers:
+#           - "8.8.8.8:53"
+#           - "1.1.1.1:53"
+#         delayBeforeCheck: 30
